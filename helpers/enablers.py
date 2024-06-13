@@ -3,8 +3,8 @@ from google.oauth2 import service_account
 
 #Get client method
 def get_client(projectId):
-    creds_file_path = "C:/Users/jhs/dr_2/drdk-portal-dataops-playground-75914bbd40e2-jesper.json" 
-    credentials = service_account.Credentials.from_service_account_file(creds_file_path)
+    creds_file_path = "<--INSERT PATH TO CREDS FILE-->" 
+    credentials = service_account.Credentials.from_service_account_file(creds_file_path) #https://cloud.google.com/bigquery/docs/samples/bigquery-client-json-credentials
     client = bigquery.Client(credentials=credentials, project=projectId)
     return client;
 
@@ -61,24 +61,24 @@ def get_all_users(client):
 
 
 def estimateQuery(client, job_config):
-    # Start the query, passing in the extra configuration.
+    # Execute Query using client and configuration.
     query_job = client.query(
         (
             "SELECT *"
             "FROM `bigquery-public-data.github_repos.commits` "
         ),
         job_config=job_config,
-    )  # Make an API request.
+    )  
 
     # A dry run query completes immediately.
-    bytes = query_job.total_bytes_processed
-    tib = bytes / (1 << 40)
-    price_per_tib_dollar = 7.5
+    bytes = query_job.total_bytes_processed # Extract Bytes used
+    tib = bytes / (2 ** 40) # Convert to TiB 
+    
+    price_per_tib_dollar = 7.5 #https://cloud.google.com/bigquery/pricing#on_demand_pricing
     total_price = tib*price_per_tib_dollar
     dollar_rate = 6.94
 
     price_in_dkk = dollar_rate * total_price
 
-    print("This query will process {} bytes.".format(query_job.total_bytes_processed))
     print("This query will process {} TiB.".format(tib))
     print("This query will cost {} DKK.".format(price_in_dkk))

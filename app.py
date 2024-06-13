@@ -28,7 +28,8 @@ table_id = f"{os.getenv('projectId')}.{os.getenv('datasetId')}.jesper_users"
 # Inspect the structure of the first user
 print(users_formatted[0])
 
-# Create the BigQuery table using the defined schema
+# Create the BigQuery table using the defined schema - SEE IMPORTS
+#Scheme needs to be checked, a thourough research was not done
 table = bigquery.Table(table_id, schema=schema)
 table = client.create_table(table)  # API request to create the table
 print(f"Created table {table.project}.{table.dataset_id}.{table.table_id}")
@@ -45,7 +46,7 @@ else:
     print(f"Encountered errors while inserting rows: {is_inserted}")
 
 # ARCHEIVED NEEDED TO FIX BUG IN THE PROCESS
-client.delete_table(table_id, not_found_ok=True)
+#client.delete_table(table_id, not_found_ok=True)
 
 #Print user from query accessing all users at once
 get_all_users(client)
